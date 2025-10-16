@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>তরুণ সংঘ - সংগঠন</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --primary-color: #00838f; --primary-dark: #006064; --secondary-color: #e0f2f1; --accent-color: #00acc1; --text-color: #263238; --text-light: #546e7a; --card-shadow: 0 8px 16px rgba(0,0,0,0.08); --font-family: 'Inter', 'Noto Sans Bengali', sans-serif; }
+        * { box-sizing: border-box; }
+        body { font-family: var(--font-family); margin: 0; background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); color: var(--text-color); line-height: 1.6; overflow-x: hidden; }
+        #app { display: flex; flex-direction: column; min-height: 100vh; }
+        header { background: linear-gradient(135deg, var(--primary-color), var(--primary-dark)); color: white; padding: 1rem; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.15); position: relative; }
+        .header-content { display: flex; align-items: center; justify-content: space-between; max-width: 1200px; margin: 0 auto; gap: 1rem; flex-wrap: wrap; }
+        .header-left { display: flex; align-items: center; gap: 1rem; flex-shrink: 0; }
+        #header-logo { max-height: 40px; width: auto; display: none; }
+        header h1 { margin: 0; font-size: 1.5rem; font-weight: 700; white-space: nowrap; }
+        header p { margin: 0; font-size: 0.8rem; opacity: 0.9; }
+        
+        .header-right { display: flex; flex-direction: column; align-items: flex-end; gap: 0.5rem; flex-grow: 1; }
+        .header-nav { display: flex; gap: 1rem; align-items: center; }
+        .header-nav a { color: white; text-decoration: none; font-weight: 500; padding: 5px 10px; border-radius: 5px; transition: background 0.3s; }
+        .header-nav a:hover { background: rgba(255,255,255,0.2); }
+        
+        .header-search { width: 100%; min-width: 250px; }
+        .header-search input { width: 100%; padding: 15px 25px; border-radius: 25px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.2); color: white; font-size: 1.2rem; }
+        .header-search input::placeholder { color: rgba(255,255,255,0.7); }
+        .header-search input:focus { outline: none; border-color: rgba(255,255,255,0.5); background: rgba(255,255,255,0.3); }
+        .admin-btn { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 4px 7px; border-radius: 5px; cursor: pointer; font-size: 0.8rem; transition: background 0.3s ease; white-space: nowrap; }
+        .admin-btn:hover { background: rgba(255,255,255,0.3); }
+
+        .banner-slider { position: relative; width: 100%; height: 400px; overflow: hidden; background: #eee; }
+        .slider-container { display: flex; transition: transform 0.5s ease-in-out; height: 100%; }
+        .slide { min-width: 100%; height: 100%; background-size: cover; background-position: center; }
+        .slider-nav { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; padding: 15px; cursor: pointer; font-size: 1.5rem; transition: background 0.3s; }
+        .slider-nav:hover { background: rgba(0,0,0,0.8); }
+        .slider-nav.prev { left: 10px; }
+        .slider-nav.next { right: 10px; }
+        .slider-dots { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; }
+        .dot { width: 12px; height: 12px; border-radius: 50%; background: rgba(255,255,255,0.5); cursor: pointer; transition: background 0.3s; }
+        .dot.active { background: white; }
+
+        #notice-board-view { background: white; border-radius: 12px; box-shadow: var(--card-shadow); padding: 1.5rem; margin: 2rem auto; max-width: 800px; text-align: center; border-left: 5px solid var(--accent-color); }
+        #notice-board-view h3 { margin-top: 0; color: var(--primary-dark); font-size: 1.5rem; }
+        .notice-container { height: 60px; overflow: hidden; position: relative; margin-top: 1rem; }
+        .notice-item { padding: 10px; color: var(--text-color); animation: slide-up 10s infinite; }
+        .notice-item p { margin: 0; }
+        .notice-item .notice-title { font-weight: 600; color: var(--primary-color); }
+        @keyframes slide-up { 0%, 33% { transform: translateY(0); } 33.33%, 66% { transform: translateY(-100%); } 66.66%, 100% { transform: translateY(-200%); } }
+
+        main { flex-grow: 1; padding: 1rem; max-width: 1200px; margin: 0 auto; width: 100%; }
+        main h2 { text-align: center; margin-bottom: 2.5rem; color: var(--primary-dark); font-size: 2.2rem; font-weight: 600; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+        .card { background: white; border-radius: 12px; box-shadow: var(--card-shadow); padding: 2rem; text-align: center; cursor: pointer; transition: transform 0.3s ease, box-shadow 0.3s ease; border: 1px solid #e0e0e0; }
+        .card:hover { transform: translateY(-8px); box-shadow: 0 12px 24px rgba(0,0,0,0.12); }
+        .team-card i { font-size: 3.5rem; background: linear-gradient(135deg, var(--primary-color), var(--accent-color)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 1rem; }
+        .team-card h3 { margin: 0.5rem 0; font-size: 1.6rem; font-weight: 600; }
+        .member-card h3 { margin: 0.5rem 0; font-size: 1.4rem; font-weight: 600; }
+        .back-button { background: var(--primary-color); color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; font-size: 1rem; font-weight: 500; cursor: pointer; margin-bottom: 2rem; transition: background-color 0.3s ease; display: inline-flex; align-items: center; gap: 8px; }
+        .back-button:hover { background-color: var(--primary-dark); }
+        .view { display: none; }
+        .view.active { display: block; }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); display: none; justify-content: center; align-items: center; z-index: 1000; backdrop-filter: blur(5px); }
+        .modal-overlay.active { display: flex; }
+        .modal-content { background-color: white; padding: 2.5rem; border-radius: 16px; max-width: 650px; width: 90%; position: relative; animation: slideUp 0.4s ease; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        .close-button { position: absolute; top: 1.5rem; right: 1.5rem; background: none; border: none; font-size: 2rem; cursor: pointer; color: #aaa; }
+        .close-button:hover { color: var(--text-color); }
+        .modal-header { display: flex; align-items: center; gap: 1.5rem; border-bottom: 1px solid #eee; padding-bottom: 1.5rem; margin-bottom: 1.5rem; }
+        .modal-header h2 { margin: 0; font-size: 2rem; }
+        .modal-header p { margin: 0; color: var(--text-light); }
+        .modal-body p { margin-bottom: 1rem; }
+        .contact-info p { display: flex; align-items: center; gap: 0.5rem; color: var(--text-light); }
+        
+        .admin-view { max-width: 900px; margin: 2rem auto; background: #f8f9fa; padding: 2rem; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border: 1px solid #e0e0e0; }
+        .admin-view h2 { margin-top: 0; color: var(--primary-dark); border-bottom: 2px solid var(--secondary-color); padding-bottom: 0.5rem; }
+        .admin-tabs { display: flex; background: white; border-radius: 10px; padding: 0.5rem; margin-bottom: 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.05); flex-wrap: wrap; }
+        .admin-tab { background: none; border: none; padding: 0.8rem 1.5rem; font-size: 1rem; font-weight: 600; color: var(--text-light); cursor: pointer; border-radius: 8px; transition: all 0.3s ease; flex-grow: 1; text-align: center; }
+        .admin-tab.active { background: var(--primary-color); color: white; box-shadow: 0 4px 10px rgba(0,131,143,0.3); }
+        .tab-content { display: none; background: white; padding: 2rem; border-radius: 10px; }
+        .tab-content.active { display: block; }
+        .form-group { margin-bottom: 1.5rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--primary-dark); }
+        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 12px 15px; border: 1px solid #ccc; border-radius: 8px; font-family: var(--font-family); font-size: 1rem; transition: border-color 0.3s, box-shadow 0.3s; }
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus { outline: none; border-color: var(--accent-color); box-shadow: 0 0 0 3px rgba(0, 172, 193, 0.2); }
+        .color-input-wrapper { display: flex; align-items: center; gap: 1rem; }
+        .color-input-wrapper input[type="color"] { width: 50px; height: 50px; border: none; border-radius: 8px; cursor: pointer; }
+        .submit-btn, .danger-btn { color: white; border: none; padding: 12px 25px; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; margin-right: 10px; }
+        .submit-btn { background: var(--accent-color); }
+        .submit-btn:hover { background: var(--primary-color); transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,172,193,0.4); }
+        .danger-btn { background: #e53935; }
+        .danger-btn:hover { background: #c62828; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(229,57,53,0.4); }
+        .list-item { background: #f9f9f9; padding: 1rem 1.5rem; border-radius: 8px; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; border: 1px solid #e0e0e0; flex-wrap: wrap; gap: 10px; }
+        .list-item-actions { display: flex; gap: 10px; }
+        .password-prompt { text-align: center; padding: 3rem; }
+        .message { padding: 1rem; border-radius: 8px; margin-top: 1rem; text-align: center; }
+        .message.success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .message.error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        footer { background-color: var(--primary-dark); color: white; text-align: center; padding: 1.5rem 1rem; margin-top: auto; }
+
+        .custom-field-row { display: flex; gap: 1rem; align-items: center; margin-bottom: 1rem; }
+        .custom-field-row .form-group { margin-bottom: 0; }
+
+        /* Fund specific styles */
+        .fund-total-card { background: linear-gradient(135deg, var(--primary-color), var(--accent-color)); color: white; padding: 2rem; border-radius: 12px; text-align: center; margin-bottom: 2rem; }
+        .fund-total-card h3 { font-size: 1.2rem; font-weight: 500; margin: 0 0 0.5rem 0; }
+        .fund-total-card p { font-size: 2.5rem; font-weight: 700; margin: 0; }
+        .fund-transaction-list { max-width: 800px; margin: 0 auto; }
+        .fund-transaction-item { background: white; border-radius: 8px; padding: 1rem 1.5rem; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; border: 1px solid #e0e0e0; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .fund-transaction-item .details { flex-grow: 1; }
+        .fund-transaction-item .details p { margin: 0; }
+        .fund-transaction-item .details .date { font-size: 0.9em; color: var(--text-light); }
+        .fund-transaction-item .amount { font-size: 1.2rem; font-weight: 600; }
+        .income-color { color: #2e7d32; } /* Green */
+        .expense-color { color: #c62828; } /* Red */
+
+
+        @media (max-width: 768px) {
+            .header-content { flex-direction: column; align-items: stretch; }
+            .header-right { align-items: stretch; }
+            .header-nav { justify-content: center; }
+            .header-search { width: 100%; max-width: 100%; }
+            .admin-tabs { flex-direction: column; }
+            .grid { grid-template-columns: 1fr; }
+            .list-item { flex-direction: column; align-items: flex-start; }
+            .list-item-actions { margin-top: 10px; width: 100%; justify-content: flex-end; }
+            .fund-transaction-item { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <header id="main-header">
+        <div class="header-content">
+            <div class="header-left">
+                <img id="header-logo" src="" alt="Logo">
+                <div>
+                    <h1><i class="fas fa-users" id="header-icon"></i> <span id="header-org-name">তরুণ সংঘ</span></h1>
+                    <p id="header-tagline">একটি পেশাদার সংগঠন</p>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="header-nav">
+                    <a href="#" onclick="showView('teams-view'); return false;"><i class="fas fa-home"></i> হোম পেজ</a>
+                    <a href="#" onclick="showView('contact-view'); return false;"><i class="fas fa-phone"></i> যোগাযোগ</a>
+                    <a href="#" onclick="showFundLogin(); return false;"><i class="fas fa-hand-holding-usd"></i> ফান্ডিং অ্যামাউন্ট</a>
+                    <button class="admin-btn" onclick="showView('admin-login')"><i class="fas fa-cog"></i></button>
+                </div>
+                <div class="header-search">
+                    <input type="text" id="header-search-input" placeholder="সদস্য বা নিউজ খুঁজুন..." onkeyup="handleSearch(event)">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="banner-slider" id="banner-slider">
+        <div class="slider-container" id="slider-container"></div>
+        <button class="slider-nav prev" onclick="changeSlide(-1)">&#10094;</button>
+        <button class="slider-nav next" onclick="changeSlide(1)">&#10095;</button>
+        <div class="slider-dots" id="slider-dots"></div>
+    </div>
+
+    <div id="notice-board-view">
+        <h3><i class="fas fa-bullhorn"></i> নোটিস বোর্ড</h3>
+        <div class="notice-container" id="notice-container"></div>
+    </div>
+
+    <main>
+        <section id="teams-view" class="view active"><h2>আমাদের টিমসমূহ</h2><div class="grid" id="team-cards-container"></div></section>
+        <section id="members-view" class="view">
+            <button class="back-button" onclick="showView('teams-view')"><i class="fas fa-arrow-left"></i> টিমসমূহে ফিরে যান</button>
+            <h2 id="selected-team-name"></h2>
+            <div class="grid" id="member-cards-container"></div>
+        </section>
+        
+        <section id="contact-view" class="view">
+            <button class="back-button" onclick="showView('teams-view')"><i class="fas fa-arrow-left"></i> হোম পেজে ফিরে যান</button>
+            <h2>যোগাযোগ</h2>
+            <div class="card" style="max-width: 600px; margin: 0 auto; text-align: left;">
+                <div id="contact-info-container">
+                    <!-- Custom fields will be rendered here -->
+                </div>
+            </div>
+            <hr style="margin: 2rem 0; max-width: 600px; margin-left: auto; margin-right: auto;">
+            <div class="card" style="max-width: 600px; margin: 0 auto; text-align: left;">
+                <h3 style="margin-top:0;">মতামত / অভিযোগ পাঠান</h3>
+                <form onsubmit="handleContactSubmit(event)">
+                    <div class="form-group"><label>আপনার নাম</label><input type="text" id="contact-name" required></div>
+                    <div class="form-group"><label>ঠিকানা</label><input type="text" id="contact-address" required></div>
+                    <div class="form-group"><label>ফোন নাম্বার</label><input type="tel" id="contact-phone" required></div>
+                    <div class="form-group"><label>আপনার মতামত / অভিযোগ</label><textarea id="contact-message" rows="4" required></textarea></div>
+                    <button type="submit" class="submit-btn">পাঠান</button>
+                </form>
+                <div id="contact-message-status"></div>
+            </div>
+        </section>
+
+        <section id="fund-login-view" class="view admin-view password-prompt">
+            <h2>Fund Account Login</h2><p>Enter the password to view the fund details.</p>
+            <div class="form-group"><input type="password" id="fund-password-input" placeholder="Password"></div>
+            <button class="submit-btn" onclick="loginToFund()">View Fund</button>
+            <div id="fund-login-message"></div>
+        </section>
+
+        <section id="fund-view" class="view">
+            <button class="back-button" onclick="showView('teams-view')"><i class="fas fa-arrow-left"></i> হোম পেজে ফিরে যান</button>
+            <h2>ফান্ডিং অ্যামাউন্ট</h2>
+            <div class="fund-total-card">
+                <h3>মোট ফান্ড</h3>
+                <p id="fund-total-amount">৳ 0</p>
+            </div>
+            <div class="fund-transaction-list" id="fund-transaction-list">
+                <!-- Transactions will be rendered here -->
+            </div>
+        </section>
+
+        <section id="admin-login" class="view admin-view password-prompt">
+            <h2>Admin Login</h2><p>Enter the password to access the admin panel.</p>
+            <div class="form-group"><input type="password" id="admin-password-input" placeholder="Password"></div>
+            <button class="submit-btn" onclick="login()">Login</button>
+            <div id="login-message"></div>
+        </section>
+        <section id="admin-dashboard" class="view admin-view">
+            <button class="back-button" onclick="showView('teams-view')"><i class="fas fa-arrow-left"></i> Back to Site</button>
+            <h2>Admin Dashboard</h2>
+            <div class="admin-tabs">
+                <button class="admin-tab active" onclick="showAdminTab(event, 'settings-tab')">Settings</button>
+                <button class="admin-tab" onclick="showAdminTab(event, 'teams-tab')">Teams</button>
+                <button class="admin-tab" onclick="showAdminTab(event, 'members-tab')">Members</button>
+                <button class="admin-tab" onclick="showAdminTab(event, 'notices-tab')">Notices</button>
+                <button class="admin-tab" onclick="showAdminTab(event, 'submissions-tab')">বার্তাসমূহ</button>
+                <button class="admin-tab" onclick="showAdminTab(event, 'fund-management-tab')">Fund Management</button>
+            </div>
+            
+            <div id="settings-tab" class="tab-content active">
+                <form onsubmit="saveSettings(event)">
+                    <div class="form-group"><label>Organization Name</label><input type="text" id="setting-org-name" required></div>
+                    <div class="form-group"><label>Tagline</label><input type="text" id="setting-tagline" required></div>
+                    <div class="form-group"><label>Footer Text</label><input type="text" id="setting-footer" required></div>
+                    <div class="form-group"><label>New Admin Password</label><input type="password" id="setting-password" placeholder="Leave blank to keep current"></div>
+                    <div class="form-group"><label>Primary Color</label><div class="color-input-wrapper"><input type="color" id="setting-primary-color"><input type="text" id="setting-primary-color-text" placeholder="#00838f"></div></div>
+                    <div class="form-group"><label>Accent Color</label><div class="color-input-wrapper"><input type="color" id="setting-accent-color"><input type="text" id="setting-accent-color-text" placeholder="#00acc1"></div></div>
+                    <div class="form-group"><label>Logo Image</label><input type="file" id="setting-logo" accept="image/*"></div>
+                    <div class="form-group"><label>Banner Images (You can select multiple)</label><input type="file" id="setting-banners" accept="image/*" multiple></div>
+                    
+                    <hr style="margin: 2rem 0;">
+                    <h3>Custom Contact Fields</h3>
+                    <p style="font-size: 0.9em; color: var(--text-light);">Add fields that will appear on the contact page (e.g., Address, Phone).</p>
+                    <div id="custom-fields-container"></div>
+                    <button type="button" class="submit-btn" onclick="addCustomField()"><i class="fas fa-plus"></i> Add New Field</button>
+
+                    <hr style="margin: 2rem 0;">
+                    <h3>Manage Admin Panel Tabs</h3>
+                    <p style="font-size: 0.9em; color: var(--text-light);">Add or remove tabs from the admin panel. You cannot delete the 'Settings' tab. Changes will require a refresh to take effect.</p>
+                    <div id="admin-tabs-manager"></div>
+                    <button type="button" class="submit-btn" onclick="addAdminTab()"><i class="fas fa-plus"></i> Add New Tab</button>
+
+                    <hr style="margin: 2rem 0;">
+                    <button type="submit" class="submit-btn">Save All Settings</button>
+                    <button type="button" class="danger-btn" onclick="resetPasswordFromAdmin()">Reset Admin Password to Default</button>
+                    <button type="button" class="danger-btn" onclick="resetToDefault()">Reset to Default</button>
+                </form>
+                <div id="settings-message"></div>
+            </div>
+            <div id="teams-tab" class="tab-content">
+                <h3>Add New Team</h3><form onsubmit="addTeam(event)"><div class="form-group"><label>Team Name</label><input type="text" id="new-team-name" required></div><button type="submit" class="submit-btn">Add Team</button></form>
+                <hr style="margin: 2rem 0;"><h3>Existing Teams</h3><div id="teams-list-container"></div>
+            </div>
+            <div id="members-tab" class="tab-content">
+                <h3 id="member-form-title">Add New Member</h3>
+                <form onsubmit="saveMember(event)">
+                    <div class="form-group"><label>Select Team</label><select id="member-team-select" required></select></div>
+                    <div class="form-group"><label>Name</label><input type="text" id="member-name" required></div>
+                    <div class="form-group"><label>Designation</label><input type="text" id="member-designation" required></div>
+                    <div class="form-group"><label>Phone</label><input type="tel" id="member-phone" required></div>
+                    <button type="submit" class="submit-btn" id="member-submit-btn">Add Member</button>
+                    <button type="button" class="danger-btn" id="cancel-edit-btn" onclick="cancelEdit()" style="display:none;">Cancel Edit</button>
+                </form>
+                <hr style="margin: 2rem 0;"><h3>Existing Members</h3><div id="members-list-container"></div>
+            </div>
+            <div id="notices-tab" class="tab-content">
+                <h3 id="notice-form-title">Add New Notice</h3>
+                <form onsubmit="saveNotice(event)">
+                    <div class="form-group"><label>Notice Title</label><input type="text" id="notice-title" required></div>
+                    <div class="form-group"><label>Notice Content</label><textarea id="notice-content" rows="3" required></textarea></div>
+                    <button type="submit" class="submit-btn" id="notice-submit-btn">Add Notice</button>
+                    <button type="button" class="danger-btn" id="cancel-edit-notice-btn" onclick="cancelEditNotice()" style="display:none;">Cancel Edit</button>
+                </form>
+                <hr style="margin: 2rem 0;"><h3>Existing Notices</h3><div id="notices-list-container"></div>
+            </div>
+            <div id="submissions-tab" class="tab-content">
+                <h3>যোগাযোগ থেকে প্রাপ্ত বার্তাসমূহ</h3>
+                <div id="submissions-list-container"></div>
+            </div>
+            <div id="fund-management-tab" class="tab-content">
+                <div class="fund-total-card">
+                    <h3>মোট ফান্ড</h3>
+                    <p id="admin-fund-total-amount">৳ 0</p>
+                </div>
+                <h3>Change Fund Login Password</h3>
+                <form onsubmit="changeFundPassword(event)">
+                    <div class="form-group"><label>New Fund Password</label><input type="password" id="new-fund-password" required></div>
+                    <button type="submit" class="submit-btn">Change Password</button>
+                </form>
+                <div id="fund-password-message"></div>
+                <hr style="margin: 2rem 0;">
+                <h3 id="transaction-form-title">Add New Transaction</h3>
+                <form onsubmit="saveFundTransaction(event)">
+                    <div class="form-group">
+                        <label>Transaction Type</label>
+                        <div style="display: flex; gap: 1rem;">
+                            <label><input type="radio" name="transaction-type" value="income" checked> Add Fund (Income)</label>
+                            <label><input type="radio" name="transaction-type" value="expense"> Deduct Fund (Expense)</label>
+                        </div>
+                    </div>
+                    <div class="form-group"><label>Date</label><input type="date" id="transaction-date" required></div>
+                    <div class="form-group"><label>Amount (৳)</label><input type="number" id="transaction-amount" required></div>
+                    <div class="form-group"><label>Description</label><input type="text" id="transaction-description" required></div>
+                    <button type="submit" class="submit-btn" id="transaction-submit-btn">Add Transaction</button>
+                    <button type="button" class="danger-btn" id="cancel-edit-transaction-btn" onclick="cancelEditTransaction()" style="display:none;">Cancel Edit</button>
+                </form>
+                <hr style="margin: 2rem 0;"><h3>Existing Transactions</h3><div id="transactions-list-container"></div>
+            </div>
+        </section>
+    </main>
+    <div id="modal-overlay" class="modal-overlay" onclick="closeModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="close-button" onclick="closeModal()">&times;</button>
+            <div class="modal-header">
+                <div>
+                    <h2 id="modal-name"></h2>
+                    <p id="modal-designation"></p>
+                </div>
+            </div>
+            <div class="modal-body"><p><strong>বায়োডাটা:</strong></p><p id="modal-bio"></p><div class="contact-info"><p><i class="fas fa-envelope"></i> <span id="modal-email"></span></p><p><i class="fas fa-phone"></i> <span id="modal-phone"></span></p></div></div>
+        </div>
+    </div>
+    <div id="search-modal" class="modal-overlay">
+        <div class="modal-content" style="max-height: 80vh; overflow-y: auto;">
+            <button class="close-button" onclick="closeSearchModal()">&times;</button>
+            <h2>খোঁজা ফলাফল</h2>
+            <div id="search-results-container"></div>
+        </div>
+    </div>
+    <footer><p id="footer-text">&copy; ২০২৪ তরুণ সংঘ. সর্বস্বত্ব সংরক্ষিত।</p></footer>
+</div>
+<script>
+    console.log("Script loaded. Initializing app.");
+    const STORAGE_KEY = 'tarunSanghaData';
+    const defaultData = { 
+        settings: { 
+            orgName: "তরুণ সংঘ", tagline: "একটি পেশাদার সংগঠন", adminPassword: "admin123", fundPassword: "fund123", footerText: "© ২০২৪ তরুণ সংঘ. সর্বস্বত্ব সংরক্ষিত।", 
+            primaryColor: "#00838f", accentColor: "#00acc1", logo: "", banners: [], customFields: [],
+            adminTabs: [
+                { id: 'settings', name: 'Settings', content: 'settings' },
+                { id: 'teams', name: 'Teams', content: 'teams' },
+                { id: 'members', name: 'Members', content: 'members' },
+                { id: 'notices', name: 'Notices', content: 'notices' },
+                { id: 'submissions', name: 'বার্তাসমূহ', content: 'submissions' },
+                { id: 'fund-management', name: 'Fund Management', content: 'fund-management' }
+            ]
+        }, 
+        teams: [ { id: 1, name: "ব্যবস্থাপনা পরিষদ", icon: "fas fa-user-tie", members: [] }, { id: 2, name: "টেকনিক্যাল টিম", icon: "fas fa-laptop-code", members: [] }, { id: 3, name: "মার্কেটিং টিম", icon: "fas fa-bullhorn", members: [] } ],
+        notices: [],
+        contactSubmissions: [],
+        fundTransactions: []
+    };
+    let appData = {}; 
+    let editingMemberId = null;
+    let editingNoticeId = null;
+    let editingTransactionId = null;
+    let currentSlideIndex = 0;
+    let slideInterval;
+
+    function init() { 
+        try { 
+            const storedData = localStorage.getItem(STORAGE_KEY); 
+            appData = storedData ? JSON.parse(storedData) : JSON.parse(JSON.stringify(defaultData)); 
+            
+            if (!appData.settings) { appData.settings = defaultData.settings; }
+            if (!appData.settings.fundPassword) { appData.settings.fundPassword = defaultData.settings.fundPassword; }
+            if (!appData.fundTransactions) { appData.fundTransactions = defaultData.fundTransactions; }
+            
+            // Migrate old transactions to have a 'type' property
+            if (appData.fundTransactions) {
+                appData.fundTransactions.forEach(t => {
+                    if (!t.type) {
+                        t.type = 'income'; // Default old transactions to income
+                    }
+                });
+            }
+
+            if(appData.settings.banner && !appData.settings.banners){ appData.settings.banners = [appData.settings.banner]; delete appData.settings.banner; }
+            
+            if (!appData.settings.orgName) { appData.settings.orgName = defaultData.settings.orgName; }
+            if (!appData.settings.tagline) { appData.settings.tagline = defaultData.settings.tagline; }
+            if (!appData.settings.footerText) { appData.settings.footerText = defaultData.settings.footerText; }
+            if (!appData.settings.adminPassword) { appData.settings.adminPassword = defaultData.settings.adminPassword; }
+            if (!appData.settings.primaryColor) { appData.settings.primaryColor = defaultData.settings.primaryColor; }
+            if (!appData.settings.accentColor) { appData.settings.accentColor = defaultData.settings.accentColor; }
+            if (!appData.settings.customFields) { appData.settings.customFields = defaultData.settings.customFields; }
+            if (!appData.settings.adminTabs) { appData.settings.adminTabs = defaultData.settings.adminTabs; }
+            if (!appData.settings.banners) { appData.settings.banners = defaultData.settings.banners; }
+            
+            if (!appData.notices) { appData.notices = defaultData.notices; }
+            if (!appData.contactSubmissions) { appData.contactSubmissions = defaultData.contactSubmissions; }
+            
+            applySettings(); 
+            renderTeams(); 
+            renderNoticeBoard(); 
+            bindEvents(); 
+            renderBannerSlider();
+        } catch (error) { 
+            console.error("Initialization failed:", error); 
+            alert("An error occurred while loading the application. Resetting to default."); 
+            localStorage.removeItem(STORAGE_KEY); 
+            init(); 
+        } 
+    }
+
+    function bindEvents() { 
+        document.getElementById('setting-primary-color').addEventListener('input', (e) => { document.getElementById('setting-primary-color-text').value = e.target.value; }); 
+        document.getElementById('setting-primary-color-text').addEventListener('input', (e) => { document.getElementById('setting-primary-color').value = e.target.value; }); 
+        document.getElementById('setting-accent-color').addEventListener('input', (e) => { document.getElementById('setting-accent-color-text').value = e.target.value; }); 
+        document.getElementById('setting-accent-color-text').addEventListener('input', (e) => { document.getElementById('setting-accent-color').value = e.target.value; }); 
+    }
+
+    function saveData() { localStorage.setItem(STORAGE_KEY, JSON.stringify(appData)); }
+    function applySettings() { 
+        const s = appData.settings; 
+        document.getElementById('header-org-name').innerText = s.orgName; 
+        document.getElementById('header-tagline').innerText = s.tagline; 
+        document.getElementById('footer-text').innerText = s.footerText; 
+        document.documentElement.style.setProperty('--primary-color', s.primaryColor); 
+        document.documentElement.style.setProperty('--accent-color', s.accentColor); 
+        document.getElementById('setting-org-name').value = s.orgName; 
+        document.getElementById('setting-tagline').value = s.tagline; 
+        document.getElementById('setting-footer').value = s.footerText; 
+        document.getElementById('setting-primary-color').value = s.primaryColor; 
+        document.getElementById('setting-primary-color-text').value = s.primaryColor; 
+        document.getElementById('setting-accent-color').value = s.accentColor; 
+        document.getElementById('setting-accent-color-text').value = s.accentColor; 
+        const logoEl = document.getElementById('header-logo'); const iconEl = document.getElementById('header-icon'); 
+        if (s.logo) { logoEl.src = s.logo; logoEl.style.display = 'block'; iconEl.style.display = 'none'; } else { logoEl.style.display = 'none'; iconEl.style.display = 'inline-block'; } 
+    }
+    
+    function renderBannerSlider() {
+        const banners = appData.settings.banners || [];
+        const sliderContainer = document.getElementById('slider-container');
+        const dotsContainer = document.getElementById('slider-dots');
+        sliderContainer.innerHTML = ''; dotsContainer.innerHTML = '';
+        if (banners.length === 0) { document.getElementById('banner-slider').style.display = 'none'; clearInterval(slideInterval); return; }
+        document.getElementById('banner-slider').style.display = 'block';
+        banners.forEach((banner, index) => {
+            const slide = document.createElement('div'); slide.className = 'slide'; slide.style.backgroundImage = `url(${banner})`; sliderContainer.appendChild(slide);
+            const dot = document.createElement('span'); dot.className = 'dot'; if (index === 0) dot.classList.add('active'); dot.onclick = () => goToSlide(index); dotsContainer.appendChild(dot);
+        });
+        startSlider();
+    }
+    function startSlider() { clearInterval(slideInterval); if (appData.settings.banners.length > 1) { slideInterval = setInterval(() => changeSlide(1), 4000); } }
+    function updateSlider() { const sliderContainer = document.getElementById('slider-container'); const dots = document.querySelectorAll('.dot'); const slideWidth = sliderContainer.children[0].clientWidth; sliderContainer.style.transform = `translateX(-${currentSlideIndex * slideWidth}px)`; dots.forEach((dot, index) => { dot.classList.toggle('active', index === currentSlideIndex); }); }
+    function changeSlide(direction) { const banners = appData.settings.banners || []; if (banners.length <= 1) return; currentSlideIndex += direction; if (currentSlideIndex >= banners.length) currentSlideIndex = 0; if (currentSlideIndex < 0) currentSlideIndex = banners.length - 1; updateSlider(); startSlider(); }
+    function goToSlide(index) { currentSlideIndex = index; updateSlider(); startSlider(); }
+    
+    function renderNoticeBoard() {
+        const container = document.getElementById('notice-container'); const notices = appData.notices || [];
+        if (notices.length === 0) { container.innerHTML = '<div class="notice-item"><p>বর্তমানে কোনো নোটিস নেই।</p></div>'; return; }
+        container.innerHTML = ''; notices.forEach(notice => { const noticeEl = document.createElement('div'); noticeEl.className = 'notice-item'; noticeEl.innerHTML = `<p class="notice-title">${notice.title}</p><p>${notice.content}</p>`; container.appendChild(noticeEl); });
+        if (notices.length > 1) { notices.forEach(notice => { const noticeEl = document.createElement('div'); noticeEl.className = 'notice-item'; noticeEl.innerHTML = `<p class="notice-title">${notice.title}</p><p>${notice.content}</p>`; container.appendChild(noticeEl); }); }
+    }
+
+    function handleSearch(event) { if (event.key === 'Enter') { const query = event.target.value.toLowerCase(); if (!query) return; const results = []; appData.teams.forEach(team => { team.members.forEach(member => { if (member.name.toLowerCase().includes(query)) { results.push({ type: 'member', data: member, teamName: team.name }); } }); }); displaySearchResults(results); } }
+    function displaySearchResults(results) { const container = document.getElementById('search-results-container'); container.innerHTML = ''; if (results.length === 0) { container.innerHTML = '<p>কোনো ফলাফল পাওয়া যায়নি।</p>'; } else { results.forEach(result => { const item = document.createElement('div'); item.className = 'list-item'; item.style.cursor = 'pointer'; item.innerHTML = `<strong>${result.data.name}</strong> - ${result.teamName}`; item.onclick = () => { showTeamMembers(appData.teams.find(t => t.name === result.teamName).id); closeSearchModal(); }; container.appendChild(item); }); } document.getElementById('search-modal').classList.add('active'); }
+    function closeSearchModal() { document.getElementById('search-modal').classList.remove('active'); document.getElementById('header-search-input').value = ''; }
+
+    function renderTeams() { const container = document.getElementById('team-cards-container'); container.innerHTML = ''; appData.teams.forEach(team => { const card = document.createElement('div'); card.className = 'card team-card'; card.onclick = () => showTeamMembers(team.id); card.innerHTML = `<i class="${team.icon}"></i><h3>${team.name}</h3><p>${team.members.length} জন সদস্য</p>`; container.appendChild(card); }); }
+    function showTeamMembers(teamId) { const team = appData.teams.find(t => t.id === teamId); if (!team) return; document.getElementById('selected-team-name').innerText = team.name; const container = document.getElementById('member-cards-container'); container.innerHTML = ''; if (team.members.length === 0) { container.innerHTML = '<p style="text-align: center; grid-column: 1/-1; color: #888;">এই টিমে এখনো কোনো সদস্য যোগ করা হয়নি।</p>'; } else { team.members.forEach(member => { const card = document.createElement('div'); card.className = 'card member-card'; card.innerHTML = `<h3>${member.name}</h3>`; container.appendChild(card); }); } showView('members-view'); }
+    
+    function showView(viewId) { 
+        document.querySelectorAll('.view').forEach(view => view.classList.remove('active')); 
+        document.getElementById(viewId).classList.add('active'); 
+        if (viewId === 'admin-dashboard') { 
+            renderAdminLists(); 
+            renderCustomFields(); 
+            renderAdminTabsManager();
+        }
+        if (viewId === 'contact-view') { renderContactPage(); }
+        if (viewId === 'fund-view') { renderFundView(); }
+    }
+
+    function showAdminTab(event, tabId) {
+        const tabButtons = document.querySelectorAll('.admin-tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+        
+        tabButtons.forEach(btn => btn.classList.remove('active'));
+        tabContents.forEach(content => content.classList.remove('active'));
+
+        event.target.classList.add('active');
+        document.getElementById(tabId).classList.add('active');
+
+        if(tabId === 'members-tab') populateMemberSelect();
+        if(tabId === 'submissions-tab') renderSubmissionsList();
+        if(tabId === 'fund-management-tab') renderFundAdminList();
+    }
+    
+    function showModal(member) { document.getElementById('modal-name').innerText = member.name; document.getElementById('modal-designation').innerText = member.designation; document.getElementById('modal-bio').innerText = member.bio; document.getElementById('modal-email').innerText = member.email; document.getElementById('modal-phone').innerText = member.phone; document.getElementById('modal-overlay').classList.add('active'); }
+    function closeModal(event) { if (!event || event.target.id === 'modal-overlay') { document.getElementById('modal-overlay').classList.remove('active'); } }
+    function login() { const password = document.getElementById('admin-password-input').value; const messageEl = document.getElementById('login-message'); const currentPassword = (appData && appData.settings) ? appData.settings.adminPassword : defaultData.settings.adminPassword; if (password === currentPassword) { showView('admin-dashboard'); messageEl.innerHTML = ''; document.getElementById('admin-password-input').value = ''; } else { messageEl.innerHTML = '<p class="message error">Incorrect password! Please try again.</p>'; } }
+    
+    // Fund Functions
+    function showFundLogin() { showView('fund-login-view'); }
+    function loginToFund() { const password = document.getElementById('fund-password-input').value; const messageEl = document.getElementById('fund-login-message'); const currentPassword = (appData && appData.settings) ? appData.settings.fundPassword : defaultData.settings.fundPassword; if (password === currentPassword) { showView('fund-view'); messageEl.innerHTML = ''; document.getElementById('fund-password-input').value = ''; } else { messageEl.innerHTML = '<p class="message error">Incorrect password! Please try again.</p>'; } }
+    function renderFundView() {
+        const transactions = appData.fundTransactions || [];
+        const totalAmount = transactions.reduce((sum, t) => {
+            return t.type === 'income' ? sum + parseFloat(t.amount) : sum - parseFloat(t.amount);
+        }, 0);
+        document.getElementById('fund-total-amount').innerText = `৳ ${totalAmount.toLocaleString('bn-BD')}`;
+
+        const listContainer = document.getElementById('fund-transaction-list');
+        listContainer.innerHTML = '';
+        if (transactions.length === 0) {
+            listContainer.innerHTML = '<p style="text-align:center; color: #888;">কোনো লেনদেন যোগ করা হয়নি।</p>';
+            return;
+        }
+
+        // Sort by date descending
+        transactions.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+        transactions.forEach(transaction => {
+            const item = document.createElement('div');
+            item.className = 'fund-transaction-item';
+            const sign = transaction.type === 'income' ? '+' : '-';
+            const colorClass = transaction.type === 'income' ? 'income-color' : 'expense-color';
+            item.innerHTML = `
+                <div class="details">
+                    <p>${transaction.description}</p>
+                    <p class="date">${new Date(transaction.date).toLocaleDateString('bn-BD')}</p>
+                </div>
+                <div class="amount ${colorClass}">${sign}৳ ${parseFloat(transaction.amount).toLocaleString('bn-BD')}</div>
+            `;
+            listContainer.appendChild(item);
+        });
+    }
+    function changeFundPassword(event) {
+        event.preventDefault();
+        const newPassword = document.getElementById('new-fund-password').value;
+        if (!appData.settings) appData.settings = {};
+        appData.settings.fundPassword = newPassword;
+        saveData();
+        showMessage('fund-password-message', 'Fund password changed successfully!', 'success');
+        event.target.reset();
+    }
+    function saveFundTransaction(event) {
+        event.preventDefault();
+        const type = document.querySelector('input[name="transaction-type"]:checked').value;
+        const transactionData = {
+            type,
+            date: document.getElementById('transaction-date').value,
+            amount: document.getElementById('transaction-amount').value,
+            description: document.getElementById('transaction-description').value
+        };
+        if (editingTransactionId) {
+            const index = appData.fundTransactions.findIndex(t => t.id === editingTransactionId);
+            if (index > -1) {
+                appData.fundTransactions[index] = { ...appData.fundTransactions[index], ...transactionData };
+                finalizeTransactionSave();
+            }
+        } else {
+            appData.fundTransactions.push({ id: Date.now(), ...transactionData });
+            finalizeTransactionSave();
+        }
+    }
+    function finalizeTransactionSave() {
+        saveData();
+        renderFundView();
+        renderFundAdminList();
+        cancelEditTransaction();
+        showMessage('settings-message', 'Transaction saved successfully!', 'success');
+    }
+    function editTransaction(id) {
+        const transaction = appData.fundTransactions.find(t => t.id === id);
+        if (!transaction) return;
+        document.getElementById('transaction-form-title').innerText = 'Edit Transaction';
+        document.querySelector(`input[name="transaction-type"][value="${transaction.type}"]`).checked = true;
+        document.getElementById('transaction-date').value = transaction.date;
+        document.getElementById('transaction-amount').value = transaction.amount;
+        document.getElementById('transaction-description').value = transaction.description;
+        document.getElementById('transaction-submit-btn').innerText = 'Update Transaction';
+        document.getElementById('cancel-edit-transaction-btn').style.display = 'inline-block';
+        editingTransactionId = id;
+        document.getElementById('fund-management-tab').scrollIntoView({ behavior: 'smooth' });
+    }
+    function cancelEditTransaction() {
+        editingTransactionId = null;
+        document.getElementById('transaction-form-title').innerText = 'Add New Transaction';
+        document.querySelector('#fund-management-tab form').reset();
+        document.getElementById('transaction-submit-btn').innerText = 'Add Transaction';
+        document.getElementById('cancel-edit-transaction-btn').style.display = 'none';
+    }
+    function deleteTransaction(id) {
+        if (confirm("Are you sure you want to delete this transaction?")) {
+            appData.fundTransactions = appData.fundTransactions.filter(t => t.id !== id);
+            saveData();
+            renderFundView();
+            renderFundAdminList();
+            showMessage('settings-message', 'Transaction deleted successfully!', 'success');
+        }
+    }
+    function renderFundAdminList() {
+        const transactions = appData.fundTransactions || [];
+        const totalAmount = transactions.reduce((sum, t) => {
+            return t.type === 'income' ? sum + parseFloat(t.amount) : sum - parseFloat(t.amount);
+        }, 0);
+        document.getElementById('admin-fund-total-amount').innerText = `৳ ${totalAmount.toLocaleString('bn-BD')}`;
+
+        const container = document.getElementById('transactions-list-container');
+        container.innerHTML = '';
+        if (transactions.length === 0) {
+            container.innerHTML = '<p>কোনো লেনদেন যোগ করা হয়নি।</p>';
+        } else {
+            transactions.sort((a, b) => new Date(b.date) - new Date(a.date));
+            transactions.forEach(transaction => {
+                const item = document.createElement('div');
+                item.className = 'list-item';
+                const typeText = transaction.type === 'income' ? 'Income' : 'Expense';
+                const sign = transaction.type === 'income' ? '+' : '-';
+                const colorClass = transaction.type === 'income' ? 'income-color' : 'expense-color';
+                item.innerHTML = `
+                    <span><strong>${transaction.description}</strong> (${typeText}) - <span class="${colorClass}">${sign}৳${parseFloat(transaction.amount).toLocaleString('bn-BD')}</span> (${new Date(transaction.date).toLocaleDateString('bn-BD')})</span>
+                    <div class="list-item-actions">
+                        <button class="submit-btn" onclick="editTransaction(${transaction.id})">Edit</button>
+                        <button class="danger-btn" onclick="deleteTransaction(${transaction.id})">Delete</button>
+                    </div>
+                `;
+                container.appendChild(item);
+            });
+        }
+    }
+
+    // Helper function to read a file as a Data URL
+    function readFileAsDataURL(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
+        });
+    }
+
+    async function saveSettings(event) { 
+        event.preventDefault(); 
+        if (!appData.settings) appData.settings = {}; 
+        const s = appData.settings; 
+        s.orgName = document.getElementById('setting-org-name').value; 
+        s.tagline = document.getElementById('setting-tagline').value; 
+        s.footerText = document.getElementById('setting-footer').value; 
+        s.primaryColor = document.getElementById('setting-primary-color').value; 
+        s.accentColor = document.getElementById('setting-accent-color').value; 
+        const newPassword = document.getElementById('setting-password').value; 
+        if (newPassword) { 
+            s.adminPassword = newPassword; 
+        } 
+        
+        const customFieldsContainer = document.getElementById('custom-fields-container');
+        const newCustomFields = [];
+        customFieldsContainer.querySelectorAll('.custom-field-row').forEach(row => {
+            const label = row.querySelector('.custom-field-label').value;
+            const value = row.querySelector('.custom-field-value').value;
+            if (label) { newCustomFields.push({ label, value }); }
+        });
+        s.customFields = newCustomFields;
+
+        const logoFile = document.getElementById('setting-logo').files[0]; 
+        const bannerFiles = document.getElementById('setting-banners').files;
+        
+        const fileReadPromises = [];
+
+        if (logoFile) {
+            fileReadPromises.push(
+                readFileAsDataURL(logoFile).then(data => {
+                    s.logo = data;
+                })
+            );
+        }
+
+        if (bannerFiles.length > 0) {
+            s.banners = [];
+            Array.from(bannerFiles).forEach(file => {
+                fileReadPromises.push(
+                    readFileAsDataURL(file).then(data => {
+                        s.banners.push(data);
+                    })
+                );
+            });
+        }
+
+        try {
+            await Promise.all(fileReadPromises);
+            applySettings(); 
+            renderBannerSlider(); 
+            saveData(); 
+            showMessage('settings-message', 'Settings saved successfully!', 'success'); 
+        } catch (error) {
+            console.error("Error reading files:", error);
+            showMessage('settings-message', 'Error saving settings. Please try again.', 'error');
+        }
+    }
+
+    function resetPasswordFromAdmin() {
+        if (confirm("Are you sure you want to reset the password to the default 'admin123'? You will be logged out.")) {
+            if (!appData.settings) appData.settings = {};
+            appData.settings.adminPassword = "admin123";
+            saveData();
+            showMessage('settings-message', 'Password has been reset to "admin123". You will now be logged out.', 'success');
+            setTimeout(() => {
+                showView('admin-login');
+            }, 2000);
+        }
+    }
+
+    function resetToDefault() { if (confirm("Are you sure? This cannot be undone.")) { localStorage.removeItem(STORAGE_KEY); init(); showMessage('settings-message', 'Reset to default successful!', 'success'); } }
+    
+    function addTeam(event) { 
+        event.preventDefault(); 
+        const teamName = document.getElementById('new-team-name').value;
+        if (!teamName) return;
+        appData.teams.push({ id: Date.now(), name: teamName, icon: "fas fa-users", members: [] }); 
+        saveData(); 
+        renderTeams(); 
+        renderAdminLists(); 
+        event.target.reset(); 
+        showMessage('settings-message', 'Team added successfully!', 'success'); 
+    }
+    function editTeam(teamId) { 
+        const team = appData.teams.find(t => t.id === teamId); 
+        if (!team) return; 
+        const newName = prompt("Edit Team Name:", team.name); 
+        if (newName && newName !== team.name) { 
+            team.name = newName; 
+            saveData(); 
+            renderTeams(); 
+            renderAdminLists(); 
+            showMessage('settings-message', 'Team updated successfully!', 'success'); 
+        } 
+    }
+    function deleteTeam(teamId) { 
+        const team = appData.teams.find(t => t.id === teamId);
+        if (team) {
+            appData.teams = appData.teams.filter(t => t.id !== teamId); 
+            saveData(); 
+            renderTeams(); 
+            renderAdminLists(); 
+            showMessage('settings-message', `Team "${team.name}" deleted successfully!`, 'success'); 
+        }
+    }
+    function saveMember(event) { 
+        event.preventDefault(); 
+        const teamId = parseInt(document.getElementById('member-team-select').value); 
+        const team = appData.teams.find(t => t.id === teamId); 
+        if (!team) return; 
+        const memberData = { name: document.getElementById('member-name').value, designation: document.getElementById('member-designation').value, phone: document.getElementById('member-phone').value }; 
+        if (editingMemberId) { 
+            const memberIndex = team.members.findIndex(m => m.id === editingMemberId); 
+            if (memberIndex > -1) { 
+                team.members[memberIndex] = { ...team.members[memberIndex], ...memberData }; 
+                finalizeMemberSave(); 
+            } 
+        } else { 
+            team.members.push({ id: Date.now(), ...memberData }); 
+            finalizeMemberSave(); 
+        } 
+    }
+    function finalizeMemberSave() { saveData(); renderTeams(); renderAdminLists(); cancelEdit(); showMessage('settings-message', 'Member saved successfully!', 'success'); }
+    function editMember(memberId) { 
+        let member = null, team = null; 
+        for(const t of appData.teams) { 
+            const m = t.members.find(mem => mem.id === memberId); 
+            if(m) { 
+                member = m; 
+                team = t; 
+                break; 
+            } 
+        } 
+        if (!member) return; 
+        document.getElementById('member-form-title').innerText = 'Edit Member'; 
+        document.getElementById('member-team-select').value = team.id; 
+        document.getElementById('member-name').value = member.name; 
+        document.getElementById('member-designation').value = member.designation; 
+        document.getElementById('member-phone').value = member.phone; 
+        document.getElementById('member-submit-btn').innerText = 'Update Member'; 
+        document.getElementById('cancel-edit-btn').style.display = 'inline-block'; 
+        editingMemberId = memberId; 
+        document.getElementById('members-tab').scrollIntoView({ behavior: 'smooth' }); 
+    }
+    function cancelEdit() { 
+        editingMemberId = null; 
+        document.getElementById('member-form-title').innerText = 'Add New Member'; 
+        document.querySelector('#members-tab form').reset(); 
+        document.getElementById('member-submit-btn').innerText = 'Add Member'; 
+        document.getElementById('cancel-edit-btn').style.display = 'none'; 
+    }
+    function deleteMember(teamId, memberId) { 
+        const team = appData.teams.find(t => t.id === teamId);
+        const member = team.members.find(m => m.id === memberId);
+        if (team && member) {
+            team.members = team.members.filter(m => m.id !== memberId); 
+            saveData(); 
+            renderTeams(); 
+            renderAdminLists(); 
+            showMessage('settings-message', `Member "${member.name}" deleted successfully!`, 'success');
+        }
+    }
+    
+    function saveNotice(event) {
+        event.preventDefault();
+        const noticeData = { title: document.getElementById('notice-title').value, content: document.getElementById('notice-content').value };
+        if (editingNoticeId) {
+            const noticeIndex = appData.notices.findIndex(n => n.id === editingNoticeId);
+            if (noticeIndex > -1) { appData.notices[noticeIndex] = { ...appData.notices[noticeIndex], ...noticeData }; finalizeNoticeSave(); }
+        } else {
+            appData.notices.push({ id: Date.now(), ...noticeData }); finalizeNoticeSave();
+        }
+    }
+    function finalizeNoticeSave() { saveData(); renderNoticeBoard(); renderAdminLists(); cancelEditNotice(); showMessage('settings-message', 'Notice saved successfully!', 'success'); }
+    function editNotice(noticeId) {
+        const notice = appData.notices.find(n => n.id === noticeId);
+        if (!notice) return;
+        document.getElementById('notice-form-title').innerText = 'Edit Notice'; document.getElementById('notice-title').value = notice.title; document.getElementById('notice-content').value = notice.content; document.getElementById('notice-submit-btn').innerText = 'Update Notice'; document.getElementById('cancel-edit-notice-btn').style.display = 'inline-block'; editingNoticeId = noticeId; document.getElementById('notices-tab').scrollIntoView({ behavior: 'smooth' });
+    }
+    function cancelEditNotice() { editingNoticeId = null; document.getElementById('notice-form-title').innerText = 'Add New Notice'; document.querySelector('#notices-tab form').reset(); document.getElementById('notice-submit-btn').innerText = 'Add Notice'; document.getElementById('cancel-edit-notice-btn').style.display = 'none'; }
+    function deleteNotice(noticeId) { 
+        const notice = appData.notices.find(n => n.id === noticeId);
+        if (notice) {
+            appData.notices = appData.notices.filter(n => n.id !== noticeId); 
+            saveData(); 
+            renderNoticeBoard(); 
+            renderAdminLists(); 
+            showMessage('settings-message', `Notice "${notice.title}" deleted successfully!`, 'success');
+        }
+    }
+
+    // Custom Fields Functions
+    function renderCustomFields() {
+        const container = document.getElementById('custom-fields-container'); if(!container) return;
+        container.innerHTML = ''; const fields = appData.settings.customFields || [];
+        fields.forEach(field => { addCustomField(field.label, field.value); });
+        if (fields.length === 0) { addCustomField(); }
+    }
+    function addCustomField(label = '', value = '') {
+        const container = document.getElementById('custom-fields-container'); if(!container) return;
+        const fieldRow = document.createElement('div'); fieldRow.className = 'custom-field-row';
+        fieldRow.innerHTML = `
+            <div class="form-group" style="flex-grow: 1;"><input type="text" placeholder="Field Label (e.g., Address)" value="${label}" class="custom-field-label"></div>
+            <div class="form-group" style="flex-grow: 2;"><input type="text" placeholder="Field Value" value="${value}" class="custom-field-value"></div>
+            <button type="button" class="danger-btn" onclick="removeCustomField(this)">Remove</button>
+        `; container.appendChild(fieldRow);
+    }
+    function removeCustomField(button) { button.parentElement.remove(); }
+    
+    // Admin Tabs Manager Functions
+    function renderAdminTabsManager() {
+        const container = document.getElementById('admin-tabs-manager'); if(!container) return;
+        container.innerHTML = '';
+        appData.settings.adminTabs.forEach(tab => {
+            const item = document.createElement('div'); item.className = 'list-item';
+            item.innerHTML = `
+                <span>${tab.name} (ID: ${tab.id})</span>
+                <div class="list-item-actions">
+                    ${tab.id === 'settings' ? '' : `<button class="danger-btn" onclick="deleteAdminTab('${tab.id}')">Delete</button>`}
+                </div>
+            `; container.appendChild(item);
+        });
+    }
+    function addAdminTab() {
+        const name = prompt("Enter new tab name:");
+        if (name) {
+            const id = 'tab-' + Date.now();
+            appData.settings.adminTabs.push({ id, name, content: 'generic' });
+            saveData();
+            renderAdminTabsManager();
+            showMessage('settings-message', `Tab "${name}" added! Please refresh the admin panel to see changes.`, 'success');
+        }
+    }
+    function deleteAdminTab(tabId) {
+        if (confirm("Are you sure? This will delete the tab and its content forever.")) {
+            const tabToDelete = appData.settings.adminTabs.find(t => t.id === tabId);
+            if (!tabToDelete) return;
+
+            appData.settings.adminTabs = appData.settings.adminTabs.filter(t => t.id !== tabId);
+            saveData();
+            renderAdminTabsManager();
+            showMessage('settings-message', `Tab "${tabToDelete.name}" deleted! Please refresh the admin panel to see changes.`, 'success');
+        }
+    }
+    
+    // Contact Page Functions
+    function renderContactPage() {
+        const container = document.getElementById('contact-info-container');
+        container.innerHTML = ''; const fields = appData.settings.customFields || [];
+        if (fields.length === 0) { container.innerHTML = '<p>যোগাযোগের তথ্য এখনো যোগ করা হয়নি। অ্যাডমিন প্যানেল থেকে যোগ করুন।</p>';
+        } else { fields.forEach(field => { const p = document.createElement('p'); p.innerHTML = `<strong>${field.label}:</strong> ${field.value}`; container.appendChild(p); }); }
+    }
+    function handleContactSubmit(event) {
+        event.preventDefault();
+        const submission = {
+            id: Date.now().toString(),
+            name: document.getElementById('contact-name').value,
+            address: document.getElementById('contact-address').value,
+            phone: document.getElementById('contact-phone').value,
+            message: document.getElementById('contact-message').value,
+            timestamp: new Date().toISOString()
+        };
+        appData.contactSubmissions.push(submission);
+        saveData();
+        event.target.reset();
+        showMessage('contact-message-status', 'আপনার বার্তা সফলভাবে পাঠানো হয়েছে। আমরা শীঘ্রই আপনার সাথে যোগাযোগ করব।', 'success');
+    }
+    function deleteSubmission(submissionId) {
+        if (confirm("Are you sure you want to delete this message?")) {
+            appData.contactSubmissions = appData.contactSubmissions.filter(s => s.id !== submissionId);
+            saveData();
+            renderSubmissionsList();
+        }
+    }
+    function renderSubmissionsList() {
+        const submissionsContainer = document.getElementById('submissions-list-container');
+        submissionsContainer.innerHTML = '';
+        const submissions = appData.contactSubmissions || [];
+        if (submissions.length === 0) {
+            submissionsContainer.innerHTML = '<p>এখনো কোনো বার্তা পাওয়া যায়নি।</p>';
+        } else {
+            submissions.reverse().forEach(sub => {
+                const item = document.createElement('div');
+                item.className = 'list-item';
+                item.innerHTML = `
+                    <div>
+                        <strong>${sub.name}</strong> (${sub.phone})<br>
+                        <small>${new Date(sub.timestamp).toLocaleString('bn-BD')}</small><br>
+                        <p style="margin-top: 0.5rem; white-space: pre-wrap;">${sub.message}</p>
+                    </div>
+                    <div class="list-item-actions">
+                        <button class="danger-btn" onclick="deleteSubmission('${sub.id}')">Delete</button>
+                    </div>
+                `;
+                submissionsContainer.appendChild(item);
+            });
+        }
+    }
+
+    function renderAdminLists() { 
+        const teamsContainer = document.getElementById('teams-list-container'); if(teamsContainer) { teamsContainer.innerHTML = ''; 
+            teamsContainer.innerHTML = `<button class="submit-btn" onclick="document.getElementById('new-team-name').focus()" style="margin-bottom:1rem;"><i class="fas fa-plus"></i> Add New Team</button><hr>`;
+            appData.teams.forEach(team => { 
+                const item = document.createElement('div'); item.className = 'list-item'; 
+                item.innerHTML = `<span><i class="${team.icon}"></i> ${team.name}</span><div class="list-item-actions"><button class="submit-btn" onclick="editTeam(${team.id})">Edit</button><button class="danger-btn" onclick="deleteTeam(${team.id})">Delete</button></div>`; 
+                teamsContainer.appendChild(item); 
+            });
+        }
+        const membersContainer = document.getElementById('members-list-container'); if(membersContainer) { membersContainer.innerHTML = ''; 
+            membersContainer.innerHTML = `<button class="submit-btn" onclick="document.getElementById('member-name').focus()" style="margin-bottom:1rem;"><i class="fas fa-plus"></i> Add New Member</button><hr>`;
+            appData.teams.forEach(team => { 
+                team.members.forEach(member => { 
+                    const item = document.createElement('div'); item.className = 'list-item'; 
+                    item.innerHTML = `<span><strong>${team.name}:</strong> ${member.name}</span><div class="list-item-actions"><button class="submit-btn" onclick="editMember(${member.id})">Edit</button><button class="danger-btn" onclick="deleteMember(${team.id}, ${member.id})">Delete</button></div>`; 
+                    membersContainer.appendChild(item); 
+                }); 
+            });
+        }
+        const noticesContainer = document.getElementById('notices-list-container'); if(noticesContainer) { noticesContainer.innerHTML = ''; 
+            noticesContainer.innerHTML = `<button class="submit-btn" onclick="document.getElementById('notice-title').focus()" style="margin-bottom:1rem;"><i class="fas fa-plus"></i> Add New Notice</button><hr>`;
+            if(appData.notices.length === 0){ 
+                noticesContainer.innerHTML += '<p>কোনো নোটিস যোগ করা হয়নি।</p>';
+            } else{ 
+                appData.notices.forEach(notice => { 
+                    const item = document.createElement('div'); item.className = 'list-item'; 
+                    item.innerHTML = `<span><strong>${notice.title}</strong></span><div class="list-item-actions"><button class="submit-btn" onclick="editNotice(${notice.id})">Edit</button><button class="danger-btn" onclick="deleteNotice(${notice.id})">Delete</button></div>`; 
+                    noticesContainer.appendChild(item); 
+                }); 
+            }
+        }
+    }
+    function populateMemberSelect() { const memberSelect = document.getElementById('member-team-select'); if(memberSelect) { memberSelect.innerHTML = ''; appData.teams.forEach(team => { const option = document.createElement('option'); option.value = team.id; option.innerText = team.name; memberSelect.appendChild(option); }); } }
+
+    function showMessage(elementId, text, type) { const el = document.getElementById(elementId); if(el){ el.innerHTML = `<p class="message ${type}">${text}</p>`; setTimeout(() => { el.innerHTML = ''; }, 5000); } }
+    document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
